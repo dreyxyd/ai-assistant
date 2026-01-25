@@ -1,4 +1,4 @@
-import { EventsGrid } from '@/widgets/EventsGrid/ui/EventsGrid.tsx';
+import { EventsGrid } from '@/components/custom/EventsGrid/ui/EventsGrid.tsx';
 
 //TODO: вынести логику получения с бекенда избранного в хук
 const events = [

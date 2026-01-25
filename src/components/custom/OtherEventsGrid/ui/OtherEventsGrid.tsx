@@ -1,4 +1,4 @@
-import { EventsGrid } from '@/widgets/EventsGrid/ui/EventsGrid.tsx';
+import { EventsGrid } from '@/components/custom/EventsGrid/ui/EventsGrid.tsx';
 
 //TODO: вынести логику получения с бекенда избранного в хук
 const events = [
@@ -26,7 +26,7 @@ const events = [
   },
   {
     imageUrl: 'https://placehold.co/600x400',
-    title: 'title',
+    title: 'title1',
     lastUpdateTitle: 'lastUpdateTitle',
     lastUpdateText: 'lastUpdateText',
     firstUpdateTitle: 'firstUpdateTitle',
@@ -81,7 +81,7 @@ const events = [
   },
 ];
 
-export const OtherEvents = () => {
+export const OtherEventsGrid = () => {
   return (
     <div className="flex flex-col justify-center gap-4">
       <div className="font-bold text-xl">Остальные сюжеты</div>

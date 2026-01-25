@@ -1,7 +1,7 @@
-import { Favourites } from '@/components/Favourites/ui/Favourites.tsx';
-import { OtherEvents } from '@/components/custom/OtherEvents/ui/OrherEvents.tsx';
+import { Favourites } from '@/components/custom/FavouritesGrid/ui/Favourites.tsx';
+import { OtherEventsGrid } from '@/components/custom/OtherEventsGrid/ui/OtherEventsGrid.tsx';
 
-export const PictureDayLayout = () => {
+export const PictureDayPage = () => {
   return (
     <div className="flex flex-col justify-center gap-4">
       <div>
@@ -9,7 +9,7 @@ export const PictureDayLayout = () => {
         <div className="text-neutral-400">Сюжеты за последние 24 часа</div>
       </div>
       <Favourites />
-      <OtherEvents />
+      <OtherEventsGrid />
     </div>
   );
 };

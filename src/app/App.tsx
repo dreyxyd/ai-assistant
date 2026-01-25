@@ -1,4 +1,4 @@
-import { Header } from '../widgets/Header/ui/Header.tsx';
+import { Header } from '@/components/custom/Header/ui/Header.tsx';
 import { MainLayout } from '@/app/layouts/MainLayout.tsx';
 
 function App() {

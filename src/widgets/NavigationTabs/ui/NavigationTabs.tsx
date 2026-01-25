@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
 import { useSearchParams } from 'react-router-dom';
-import { DEFAULT_PAGE, PAGE_QUERY_KEY } from '../../../../../shared/consts.ts';
+import { DEFAULT_PAGE, PAGE_QUERY_KEY } from '../../../../shared/consts.ts';
 
 export const NavigationTabs = () => {
   const [searchParams, setSearchParams] = useSearchParams();
