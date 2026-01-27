@@ -3,6 +3,7 @@ import { EventsGrid } from '@/components/custom/EventsGrid/ui/EventsGrid.tsx';
 //TODO: вынести логику получения с бекенда избранного в хук
 const events = [
   {
+    id: 1,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title',
     lastUpdateTitle: 'lastUpdateTitle',
@@ -14,6 +15,7 @@ const events = [
     lastUpdatedAt: 'lastUpdatedAt',
   },
   {
+    id: 2,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title2',
     lastUpdateTitle: 'lastUpdateTitle',
@@ -25,6 +27,7 @@ const events = [
     lastUpdatedAt: 'lastUpdatedAt',
   },
   {
+    id: 3,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title1',
     lastUpdateTitle: 'lastUpdateTitle',
@@ -36,6 +39,7 @@ const events = [
     lastUpdatedAt: 'lastUpdatedAt',
   },
   {
+    id: 4,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title3',
     lastUpdateTitle: 'lastUpdateTitle',
@@ -47,6 +51,7 @@ const events = [
     lastUpdatedAt: 'lastUpdatedAt',
   },
   {
+    id: 5,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title4',
     lastUpdateTitle: 'lastUpdateTitle',
@@ -58,6 +63,7 @@ const events = [
     lastUpdatedAt: 'lastUpdatedAt',
   },
   {
+    id: 6,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title5',
     lastUpdateTitle: 'lastUpdateTitle',
@@ -69,6 +75,7 @@ const events = [
     lastUpdatedAt: 'lastUpdatedAt',
   },
   {
+    id: 7,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title6',
     lastUpdateTitle: 'lastUpdateTitle',

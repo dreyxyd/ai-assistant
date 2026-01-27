@@ -3,6 +3,7 @@ import { EventsGrid } from '@/components/custom/EventsGrid/ui/EventsGrid.tsx';
 //TODO: вынести логику получения с бекенда избранного в хук
 const events = [
   {
+    id: 1,
     imageUrl: 'https://placehold.co/600x400',
     title: 'title',
     lastUpdateTitle: 'lastUpdateTitle',
@@ -14,6 +15,7 @@ const events = [
     lastUpdatedAt: 'lastUpdatedAt',
   },
   {
+    id: 2,
     title: 'title 2',
     badgeText: 'badgeText 2',
     lastUpdateTitle: 'lastUpdateTitle 2',

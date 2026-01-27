@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.t
 import { Star } from 'lucide-react';
 
 export interface EventItem {
+  id: number;
   imageUrl?: string;
   title: string;
   badgeText?: string;
@@ -21,7 +22,7 @@ interface EventItemProps {
 
 export const EventItem = ({ event, showImage = false }: EventItemProps) => {
   return (
-    <Card key={event.title}>
+    <Card key={event.id}>
       <CardHeader>
         {event.imageUrl && showImage && (
           <div className="w-full">
