@@ -18,7 +18,7 @@ export const ArticlePage = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-2 mb-2 gap-1 text-muted-foreground hover:text-foreground"
+            className="-ml-2 mb-2 gap-1 text-muted-foreground hover:text-foreground w-32"
             onClick={() => navigate(-1)}
           >
             <ChevronLeft className="h-4 w-4" />
