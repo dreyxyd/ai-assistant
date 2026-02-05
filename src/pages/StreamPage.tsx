@@ -1,5 +1,4 @@
 import { EventsStream } from '@/widgets/EventsStream/ui/EventsStream.tsx';
-import { ArticlePage } from '@/pages/ArticlePage.tsx';
 
 export const StreamPage = () => {
   return (
@@ -9,7 +8,6 @@ export const StreamPage = () => {
         <div className="text-neutral-400">Публикации за последние 24 часа</div>
       </div>
       <EventsStream />
-      <ArticlePage />
     </div>
   );
 };

@@ -1,9 +1,7 @@
-export const PAGE_QUERY_KEY = 'page';
-export const DEFAULT_PAGE = 'pictureDay';
-export const PAGES = {
-  home: 'home',
-  stream: 'stream',
-  pictureDay: 'pictureDay',
+export const ROUTES = {
+  pictureDay: '/',
+  stream: '/stream',
+  article: (id: string | number) => `/article/${id}`,
 } as const;
 
 export const typeOptions = ['Пресс-Службы', 'ИА', 'СМИ'];

@@ -1,5 +1,5 @@
 import { Favourites } from '@/components/custom/FavouritesGrid/ui/Favourites.tsx';
-import { OtherEventsGrid } from '@/components/custom/OtherEventsGrid/ui/OtherEventsGrid.tsx';
+import { RestEventsGrid } from '@/components/custom/RestEventsGrid/ui/RestEventsGrid.tsx';
 
 export const PictureDayPage = () => {
   return (
@@ -9,7 +9,7 @@ export const PictureDayPage = () => {
         <div className="text-neutral-400">Сюжеты за последние 24 часа</div>
       </div>
       <Favourites />
-      <OtherEventsGrid />
+      <RestEventsGrid />
     </div>
   );
 };

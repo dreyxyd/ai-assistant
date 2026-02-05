@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../../../../shared/consts.ts';
 
 export interface EventItem {
   id: number;
@@ -21,8 +23,14 @@ interface EventItemProps {
 }
 
 export const EventItem = ({ event, showImage = false }: EventItemProps) => {
+  const navigate = useNavigate();
+
+  const goToArticle = () => {
+    navigate(ROUTES.article(event.id));
+  };
+
   return (
-    <Card key={event.id}>
+    <Card key={event.id} className="cursor-pointer" onClick={goToArticle}>
       <CardHeader>
         {event.imageUrl && showImage && (
           <div className="w-full">
@@ -34,7 +42,12 @@ export const EventItem = ({ event, showImage = false }: EventItemProps) => {
             <div>{event.title}</div>
             {event.badgeText && <div>{event.badgeText}</div>}
           </div>
-          <div>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.key === 'Enter' && e.stopPropagation()}
+            role="button"
+            tabIndex={0}
+          >
             <Star />
           </div>
         </CardTitle>

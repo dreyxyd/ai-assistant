@@ -1,18 +1,23 @@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
-import { useSearchParams } from 'react-router-dom';
-import { DEFAULT_PAGE, PAGE_QUERY_KEY } from '../../../../shared/consts.ts';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../../../shared/consts.ts';
+
+const pathToTab: Record<string, string> = {
+  [ROUTES.pictureDay]: 'pictureDay',
+  [ROUTES.stream]: 'stream',
+};
 
 export const NavigationTabs = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const activePage = searchParams.get(PAGE_QUERY_KEY) ?? DEFAULT_PAGE;
+  const activePage =
+    pathToTab[location.pathname] ??
+    (location.pathname.startsWith('/article') ? 'pictureDay' : 'pictureDay');
 
   const handleTabChange = (value: string) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev);
-      next.set(PAGE_QUERY_KEY, value);
-      return next;
-    });
+    if (value === 'pictureDay') navigate(ROUTES.pictureDay);
+    if (value === 'stream') navigate(ROUTES.stream);
   };
 
   return (

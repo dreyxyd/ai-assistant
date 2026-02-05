@@ -19,7 +19,6 @@ export const AllSourcesPostsList = ({ data }: AllSourcesPostsList) => {
       await navigator.clipboard.writeText(link);
       setCopiedId(id);
 
-      // Возвращаем текст обратно через 2 секунды
       setTimeout(() => {
         setCopiedId(null);
       }, 2000);
@@ -28,7 +27,7 @@ export const AllSourcesPostsList = ({ data }: AllSourcesPostsList) => {
     }
   };
   return (
-    <div>
+    <div className="w-full">
       <div className="text-xl font-bold pl-14">Все источники ({data.length})</div>
       {data.map((item) => (
         <div className="flex flex-row gap-6 items-center justify-start">
@@ -39,15 +38,18 @@ export const AllSourcesPostsList = ({ data }: AllSourcesPostsList) => {
               <div>{item.title}</div>
             </div>
             <div className="flex flex-row justify-center items-center">
-              <span className="hover:text-neutral-500 flex flex-row items-center justify-center gap-1 cursor-pointer">
-                Оригинал
-              </span>
-              <div
+              <a href={item.outerLink} target="_blank">
+                <span className="hover:text-neutral-500 flex flex-row items-center justify-center gap-1 cursor-pointer">
+                  Оригинал
+                </span>
+              </a>
+
+              <button
                 onClick={() => handleCopy(item.id, item.outerLink)}
                 className="hover:underline w-42 text-right cursor-pointer"
               >
                 {copiedId === item.id ? 'Скопировано!' : 'Копировать ссылку'}
-              </div>
+              </button>
             </div>
           </div>
         </div>
