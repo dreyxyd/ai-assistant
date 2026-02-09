@@ -12,7 +12,7 @@ export const ProfileDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="text-black">
+        <Button className="text-black bg-white hover:bg-gray-100 border border-gray-200 shadow-sm">
           <User />
         </Button>
       </DropdownMenuTrigger>

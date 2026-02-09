@@ -1,10 +1,6 @@
 import type React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import {
-  ARTICLE_ID_QUERY_KEY,
-  DEFAULT_PAGE,
-  PAGE_QUERY_KEY,
-} from '../../../shared/consts.ts';
+import { ARTICLE_ID_QUERY_KEY, DEFAULT_PAGE, PAGE_QUERY_KEY } from '../../../shared/consts.tsx';
 import { PictureDayPage } from '@/pages/PictureDayPage.tsx';
 import { StreamPage } from '@/pages/StreamPage.tsx';
 import { ArticlePage } from '@/pages/ArticlePage.tsx';

@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { FilterSelect } from '@/widgets/FiltersBar/ui/FilterSelect.tsx';
-import { periodOptions, sourceOptions, typeOptions } from '../../../../shared/consts.ts';
+import { periodOptions, sourceOptions, typeOptions } from '../../../../shared/consts.tsx';
 import { FilterMultiSelect } from '@/widgets/FiltersBar/ui/FilterMultiSelect.tsx';
 
 export const FiltersBar = ({ filters, setFilters }) => {

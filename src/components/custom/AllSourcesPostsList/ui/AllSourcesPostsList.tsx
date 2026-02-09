@@ -1,5 +1,6 @@
 import { formatTime } from '@/lib/formatters.ts';
 import { useState } from 'react';
+import { sourceIconsMap } from '../../../../../shared/consts.tsx';
 
 export interface AllSourcesItem {
   id: number;
@@ -28,13 +29,13 @@ export const AllSourcesPostsList = ({ data }: AllSourcesPostsList) => {
   };
   return (
     <div className="w-full">
-      <div className="text-xl font-bold pl-14">Все источники ({data.length})</div>
+      <div className="text-xl font-bold md:pl-14">Все источники ({data.length})</div>
       {data.map((item) => (
         <div className="flex flex-row gap-6 items-center justify-start">
           <div>{formatTime(item.time)}</div>
           <div className="border-b border-gray-200 flex flex-row items-center justify-between w-full">
             <div className="flex flex-row justify-center items-center">
-              <div>[{item.sourceName}]</div>
+              <div>{sourceIconsMap[item.sourceName]}</div>
               <div>{item.title}</div>
             </div>
             <div className="flex flex-row justify-center items-center">

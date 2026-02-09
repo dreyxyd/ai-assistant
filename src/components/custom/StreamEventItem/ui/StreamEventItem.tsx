@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { ArrowRight, SquareArrowOutUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../../../shared/consts.ts';
+import { ROUTES } from '../../../../../shared/consts.tsx';
 
 export interface StreamEvent {
   id: number;
@@ -38,10 +38,7 @@ export const StreamEventItem = ({ streamEvent }: StreamEventItemProps) => {
         <div className="flex flex-col justify-between gap-2 h-full">
           <div className="font-bold">{title}</div>
           {subtitle && <div>{subtitle}</div>}
-          <div
-            className="flex flex-row items-center gap-4 text-black"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="flex flex-row items-center gap-4 text-black" onClick={(e) => e.stopPropagation()}>
             <a target="_blank" href={originalLink} className="flex flex-row items-center justify-center">
               <span className="hover:text-neutral-500 flex flex-row items-center justify-center gap-1">
                 <SquareArrowOutUpRight className="mt-0.5" size={14} /> Оригинал

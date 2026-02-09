@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../../shared/consts.ts';
+import { ROUTES } from '../../../../shared/consts.tsx';
 
 const pathToTab: Record<string, string> = {
   [ROUTES.pictureDay]: 'pictureDay',
@@ -12,8 +12,7 @@ export const NavigationTabs = () => {
   const navigate = useNavigate();
 
   const activePage =
-    pathToTab[location.pathname] ??
-    (location.pathname.startsWith('/article') ? 'pictureDay' : 'pictureDay');
+    pathToTab[location.pathname] ?? (location.pathname.startsWith('/article') ? 'pictureDay' : 'pictureDay');
 
   const handleTabChange = (value: string) => {
     if (value === 'pictureDay') navigate(ROUTES.pictureDay);

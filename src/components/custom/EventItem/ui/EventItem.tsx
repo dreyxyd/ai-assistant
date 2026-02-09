@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../../../shared/consts.ts';
+import { ROUTES } from '../../../../../shared/consts.tsx';
 
 export interface EventItem {
   id: number;
