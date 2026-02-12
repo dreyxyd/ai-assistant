@@ -65,7 +65,7 @@ export const favourites = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
   {
     id: 2,
@@ -77,7 +77,7 @@ export const favourites = [
     firstUpdateText: 'firstUpdateText 2',
     postsCount: 2,
     sourceCount: 2,
-    lastUpdatedAt: 'lastUpdatedAt 2',
+    lastUpdatedAt: '2 мин',
   },
 ];
 
@@ -92,7 +92,7 @@ export const restEvents = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
   {
     id: 2,
@@ -104,7 +104,7 @@ export const restEvents = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
   {
     id: 3,
@@ -116,7 +116,7 @@ export const restEvents = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
   {
     id: 4,
@@ -128,7 +128,7 @@ export const restEvents = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
   {
     id: 5,
@@ -140,7 +140,7 @@ export const restEvents = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
   {
     id: 6,
@@ -152,7 +152,7 @@ export const restEvents = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
   {
     id: 7,
@@ -164,7 +164,7 @@ export const restEvents = [
     firstUpdateText: 'firstUpdateText',
     postsCount: 3,
     sourceCount: 1,
-    lastUpdatedAt: 'lastUpdatedAt',
+    lastUpdatedAt: '2 мин',
   },
 ];
 
@@ -373,5 +373,38 @@ export const summaryMap = [
     link: 'string',
     fullText:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+  },
+];
+
+export const sourcesMap = [
+  {
+    id: 'src_123',
+    name: 'ТАСС',
+    url: 'rbc.ru',
+    type: 'smi',
+    region: 'Москва',
+    is_active: true,
+    frequency_minutes: 5,
+    logo_url: 'https://cdn.example.com/logos/tass.png',
+  },
+  {
+    id: 'src_124',
+    name: 'РБК',
+    url: 'tass.ru',
+    type: 'ia',
+    region: 'Россия',
+    is_active: true,
+    frequency_minutes: 5,
+    logo_url: 'https://cdn.example.com/logos/tass.png',
+  },
+  {
+    id: 'src_125',
+    name: 'РИА',
+    url: 'kommersant.ru',
+    type: 'press',
+    region: 'Россия',
+    is_active: false,
+    frequency_minutes: 5,
+    logo_url: 'https://cdn.example.com/logos/tass.png',
   },
 ];

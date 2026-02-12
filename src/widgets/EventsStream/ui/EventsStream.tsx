@@ -5,11 +5,22 @@ import { streamEvents } from '@/shared/mocks.ts';
 
 //TODO: разобраться с определением периода
 
+interface Sources {
+  id: string;
+  url: string;
+  name: string;
+  logo_url: string;
+  type: string;
+  region: string;
+  is_active: boolean;
+  frequency_minutes: number;
+}
+
 export const EventsStream = () => {
   const [filters, setFilters] = useState({
     type: '',
     period: '',
-    source: [] as string[],
+    source: [] as Sources[],
     query: '',
   });
 

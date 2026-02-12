@@ -3,6 +3,7 @@ import { Header } from '@/components/custom/Header/ui/Header.tsx';
 import { PictureDayPage } from '@/pages/PictureDayPage.tsx';
 import { StreamPage } from '@/pages/StreamPage.tsx';
 import { ArticlePage } from '@/pages/ArticlePage.tsx';
+import { SourcesPage } from '@/pages/SourcesPage.tsx';
 
 function PageLayout() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<PictureDayPage />} />
           <Route path="/stream" element={<StreamPage />} />
           <Route path="/article/:id" element={<ArticlePage />} />
+          <Route path="/sources" element={<SourcesPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

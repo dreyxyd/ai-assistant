@@ -3,15 +3,62 @@ import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../../../shared/consts.tsx';
 
+const real = {
+  id: 'story_123',
+  ai_title: 'ЦБ повысил ключевую ставку до 18%',
+  first_publication: {
+    published_at: '2019-08-24T14:15:22Z',
+    source: {
+      name: 'РБК',
+      logo_url: 'string',
+    },
+    text: 'Источники сообщили о возможном повышении ставки на заседании совета директоров.',
+  },
+  last_significant_update: {
+    published_at: '2019-08-24T14:15:22Z',
+    source: {
+      name: 'ТАСС',
+      logo_url: 'string',
+    },
+    text: 'На пресс-конференции в ЦБ заявили, что решение связано с ускорением инфляции.',
+  },
+  publications_count: 12,
+  sources_count: 8,
+  updated_ago: '2 мин назад',
+  is_starred_by_me: true,
+  is_unseen_by_me: true,
+};
+
+interface Source {
+  name: string;
+  logo_url: string;
+}
+
+interface Publication {
+  published_at: string;
+  source: Source;
+  text: string;
+}
+
 export interface EventItem {
-  id: number;
+  id: string;
+  ai_title: string;
+  first_publication: Publication;
+  last_significant_update: Publication;
+  publications_count: number;
+  sources_count: number;
+  updated_ago: string;
+  is_starred_by_me: boolean;
+  is_unseen_by_me: boolean;
+
   imageUrl?: string;
-  title: string;
   badgeText?: string;
-  lastUpdateTitle: string;
-  lastUpdateText: string;
+
+  title: string;
   firstUpdateTitle: string;
   firstUpdateText: string;
+  lastUpdateTitle: string;
+  lastUpdateText: string;
   postsCount: number;
   sourceCount: number;
   lastUpdatedAt: string;
@@ -29,12 +76,13 @@ export const EventItem = ({ event, showImage = false }: EventItemProps) => {
     navigate(ROUTES.article(event.id));
   };
 
+  //TODO: кликабельный star /api/stories/{id}/star
   return (
-    <Card key={event.id} className="cursor-pointer" onClick={goToArticle}>
+    <Card key={event.id}>
       <CardHeader>
         {event.imageUrl && showImage && (
           <div className="w-full">
-            <img alt="title image" src={event.imageUrl} className="rounded-xl" />
+            <img alt="title image" src={event.imageUrl} className="rounded-xl cursor-pointer" onClick={goToArticle} />
           </div>
         )}
         <CardTitle className="flex flex-row items-center justify-between">
@@ -42,14 +90,9 @@ export const EventItem = ({ event, showImage = false }: EventItemProps) => {
             <div>{event.title}</div>
             {event.badgeText && <div>{event.badgeText}</div>}
           </div>
-          <div
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.key === 'Enter' && e.stopPropagation()}
-            role="button"
-            tabIndex={0}
-          >
+          <button className="cursor-pointer">
             <Star />
-          </div>
+          </button>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">

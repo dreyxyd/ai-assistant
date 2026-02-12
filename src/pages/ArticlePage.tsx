@@ -5,12 +5,16 @@ import { Summary } from '@/widgets/Summary/ui/Summary.tsx';
 import { article } from '@/shared/mocks.ts';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button.tsx';
-import { ArrowLeft, ChevronLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { useEffect } from 'react';
 
 export const ArticlePage = () => {
   const navigate = useNavigate();
   const { headerData, whatsNew, allSources } = article;
 
+  useEffect(() => {
+    //TODO: /api/stories/{id}/seen
+  }, []);
   return (
     <div className="flex flex-col lg:flex-row justify-between items-center w-full gap-4">
       <div className="flex flex-col flex-1 justify-center items-start gap-6 h-full self-start w-full">

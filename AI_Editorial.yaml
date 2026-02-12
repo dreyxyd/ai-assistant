@@ -1,0 +1,989 @@
+openapi: 3.0.3
+info:
+  title: News Monitoring API (Поток / Картина дня)
+  description: |
+    REST API для системы мониторинга новостей для редакторов.
+    
+    **Основные возможности:**
+    - Поток публикаций (RSS-читалка) с фильтрами
+    - Картина дня (сюжеты за 24 часа с AI-саммари)
+    - Детальный просмотр сюжета (timeline + источники)
+    - Персональные отметки "важное для меня"
+    - Глобальный поиск по публикациям и источникам
+    - Управление источниками (добавление, приостановка)
+    - Админ-панель (пользователи, частота парсинга)
+    
+    **Аутентификация:** Bearer token (JWT).
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: https://api.example.com
+    description: Production
+  - url: https://staging-api.example.com
+    description: Staging
+  - url: http://localhost:8000
+    description: Local development
+
+tags:
+  - name: Auth
+    description: Аутентификация и управление сессией
+  - name: Stories
+    description: Сюжеты (Картина дня)
+  - name: Publications
+    description: Публикации (Поток)
+  - name: Sources
+    description: Источники (мои источники)
+  - name: Search
+    description: Глобальный поиск
+  - name: Admin
+    description: Администрирование
+
+security:
+  - BearerAuth: []
+
+paths:
+  # ============ AUTH ============
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Вход в систему
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: editor@example.com
+                password:
+                  type: string
+                  format: password
+                  example: secret123
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Выход из системы
+      responses:
+        '204':
+          description: Успешный выход
+
+  /api/auth/me:
+    get:
+      tags: [Auth]
+      summary: Получить данные текущего пользователя
+      responses:
+        '200':
+          description: Данные пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /api/auth/forgot-password:
+    post:
+      tags: [Auth]
+      summary: Запрос на сброс пароля
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Письмо отправлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Письмо со ссылкой для восстановления отправлено
+
+  /api/auth/reset-password:
+    post:
+      tags: [Auth]
+      summary: Сброс пароля по токену
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password]
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Пароль изменен
+        '400':
+          description: Неверный или истекший токен
+
+  # ============ STORIES (Картина дня) ============
+  /api/stories:
+    get:
+      tags: [Stories]
+      summary: Список сюжетов (Картина дня, 24 часа)
+      parameters:
+        - name: starred
+          in: query
+          description: Фильтр по важным для меня
+          schema:
+            type: boolean
+            example: true
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Список сюжетов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StoryCard'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+  /api/stories/{id}:
+    get:
+      tags: [Stories]
+      summary: Детали сюжета
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: story_123
+      responses:
+        '200':
+          description: Полная информация о сюжете
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoryDetail'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/stories/{id}/star:
+    post:
+      tags: [Stories]
+      summary: Отметить/снять "важное для меня"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Статус изменен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_starred:
+                    type: boolean
+
+  /api/stories/{id}/seen:
+    post:
+      tags: [Stories]
+      summary: Отметить сюжет просмотренным
+      description: Обновляет user_last_seen_at для расчета "что нового"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Просмотр зафиксирован
+
+  # ============ PUBLICATIONS (Поток) ============
+  /api/publications:
+    get:
+      tags: [Publications]
+      summary: Лента публикаций (Поток, 24 часа)
+      parameters:
+        - name: type
+          in: query
+          description: Тип источника
+          schema:
+            type: string
+            enum: [all, smi, ia, press]
+            default: all
+        - name: source_id
+          in: query
+          description: Конкретный источник (ID)
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Поиск по источникам (название)
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 40
+      responses:
+        '200':
+          description: Список публикаций
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Publication'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+  # ============ SOURCES (Мои источники) ============
+  /api/me/sources:
+    get:
+      tags: [Sources]
+      summary: Мои источники
+      responses:
+        '200':
+          description: Список источников пользователя
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Source'
+
+    post:
+      tags: [Sources]
+      summary: Добавить источник
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url, type, region]
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  example: https://tass.ru
+                type:
+                  type: string
+                  enum: [smi, ia, press]
+                  example: ia
+                region:
+                  type: string
+                  example: Россия
+      responses:
+        '201':
+          description: Источник добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '400':
+          description: Некорректный URL или дубликат
+
+  /api/me/sources/{id}:
+    patch:
+      tags: [Sources]
+      summary: Изменить статус источника
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  description: Приостановить/возобновить
+      responses:
+        '200':
+          description: Источник обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+
+    delete:
+      tags: [Sources]
+      summary: Удалить источник
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Источник удален
+
+  /api/sources/{id}/publications:
+    get:
+      tags: [Sources]
+      summary: Лента публикаций источника (страница источника)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Публикации источника
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  source:
+                    $ref: '#/components/schemas/Source'
+                  publications:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Publication'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+  # ============ SEARCH ============
+  /api/search:
+    get:
+      tags: [Search]
+      summary: Глобальный поиск
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            example: ключевая ставка 18
+        - name: type
+          in: query
+          description: Тип результатов
+          schema:
+            type: string
+            enum: [publications, sources]
+            default: publications
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Результаты поиска
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/SearchPublicationsResult'
+                  - $ref: '#/components/schemas/SearchSourcesResult'
+
+  # ============ ADMIN ============
+  /api/admin/users:
+    get:
+      tags: [Admin]
+      summary: Список пользователей
+      responses:
+        '200':
+          description: Список пользователей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    post:
+      tags: [Admin]
+      summary: Создать пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, description]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /api/admin/users/{id}:
+    patch:
+      tags: [Admin]
+      summary: Изменить пользователя
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Пользователь обновлен
+
+    delete:
+      tags: [Admin]
+      summary: Удалить пользователя
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Пользователь удален
+
+  /api/admin/sources:
+    get:
+      tags: [Admin]
+      summary: Глобальный список источников (все пользователи)
+      responses:
+        '200':
+          description: Источники с частотой парсинга
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminSource'
+
+  /api/admin/sources/{id}:
+    patch:
+      tags: [Admin]
+      summary: Изменить частоту парсинга источника
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                frequency_minutes:
+                  type: integer
+                  enum: [5, 15, 30]
+                  example: 5
+      responses:
+        '200':
+          description: Частота обновлена
+
+# ============ COMPONENTS ============
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Неавторизован
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unauthorized
+
+    NotFound:
+      description: Ресурс не найден
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Not found
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: user_1
+        name:
+          type: string
+          example: Иван Иванов
+        email:
+          type: string
+          format: email
+          example: editor@example.com
+        description:
+          type: string
+          example: Редактор отдела новостей
+        role:
+          type: string
+          enum: [editor, admin]
+          example: editor
+
+    Source:
+      type: object
+      properties:
+        id:
+          type: string
+          example: src_123
+        url:
+          type: string
+          format: uri
+          example: https://tass.ru
+        name:
+          type: string
+          example: ТАСС
+        logo_url:
+          type: string
+          format: uri
+          example: https://cdn.example.com/logos/tass.png
+        type:
+          type: string
+          enum: [smi, ia, press]
+          example: ia
+        region:
+          type: string
+          example: Россия
+        is_active:
+          type: boolean
+          example: true
+        frequency_minutes:
+          type: integer
+          description: Частота парсинга (только для отображения)
+          example: 5
+
+    AdminSource:
+      allOf:
+        - $ref: '#/components/schemas/Source'
+        - type: object
+          properties:
+            subscribers_count:
+              type: integer
+              description: Количество редакторов, подписанных на источник
+              example: 3
+            last_parsed_at:
+              type: string
+              format: date-time
+
+    Publication:
+      type: object
+      properties:
+        id:
+          type: string
+          example: pub_891
+        source:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+              example: ТАСС
+            logo_url:
+              type: string
+        published_at:
+          type: string
+          format: date-time
+          example: "2026-02-09T15:30:00Z"
+        title:
+          type: string
+          example: ЦБ повысил ключевую ставку до 18%
+        snippet:
+          type: string
+          example: Решение принято на фоне ускорения инфляции...
+        original_url:
+          type: string
+          format: uri
+        thumbnail_url:
+          type: string
+          format: uri
+          nullable: true
+        story_id:
+          type: string
+          nullable: true
+          example: story_123
+        story_status:
+          type: string
+          enum: [ready, processing]
+          example: ready
+
+    StoryCard:
+      type: object
+      description: Карточка сюжета для списка (Картина дня)
+      properties:
+        id:
+          type: string
+          example: story_123
+        ai_title:
+          type: string
+          example: ЦБ повысил ключевую ставку до 18%
+        first_publication:
+          type: object
+          properties:
+            published_at:
+              type: string
+              format: date-time
+            source:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: РБК
+                logo_url:
+                  type: string
+            text:
+              type: string
+              example: Источники сообщили о возможном повышении ставки на заседании совета директоров.
+        last_significant_update:
+          type: object
+          properties:
+            published_at:
+              type: string
+              format: date-time
+            source:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: ТАСС
+                logo_url:
+                  type: string
+            text:
+              type: string
+              example: На пресс-конференции в ЦБ заявили, что решение связано с ускорением инфляции.
+        publications_count:
+          type: integer
+          example: 12
+        sources_count:
+          type: integer
+          example: 8
+        updated_ago:
+          type: string
+          example: 2 мин назад
+        is_starred_by_me:
+          type: boolean
+          example: true
+        is_unseen_by_me:
+          type: boolean
+          example: true
+
+    StoryDetail:
+      type: object
+      description: Полная информация о сюжете
+      properties:
+        id:
+          type: string
+        ai_title:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        last_significant_update_at:
+          type: string
+          format: date-time
+        publications_count:
+          type: integer
+        sources_count:
+          type: integer
+        is_starred_by_me:
+          type: boolean
+        user_last_seen_at:
+          type: string
+          format: date-time
+          nullable: true
+        whats_new:
+          type: array
+          description: Что нового с прошлого просмотра (максимум 5)
+          items:
+            $ref: '#/components/schemas/Fact'
+        facts:
+          type: array
+          description: Timeline фактов (по умолчанию последние 10)
+          items:
+            $ref: '#/components/schemas/Fact'
+        facts_total:
+          type: integer
+          description: Общее количество фактов
+          example: 24
+        publications:
+          type: array
+          description: Все источники сюжета
+          items:
+            $ref: '#/components/schemas/StoryPublication'
+
+    Fact:
+      type: object
+      properties:
+        id:
+          type: string
+          example: fact_456
+        timestamp:
+          type: string
+          format: date-time
+        text:
+          type: string
+          example: ЦБ повысил ключевую ставку до 18%.
+        key_source:
+          type: object
+          description: Самый ранний источник (оперативный)
+          properties:
+            source_id:
+              type: string
+            name:
+              type: string
+              example: ТАСС
+            logo_url:
+              type: string
+            published_at:
+              type: string
+              format: date-time
+            publication_id:
+              type: string
+            anchor_id:
+              type: string
+              example: pub_891
+            original_url:
+              type: string
+              format: uri
+        supporting_sources:
+          type: array
+          description: Остальные источники, подтверждающие факт
+          items:
+            type: object
+            properties:
+              source_id:
+                type: string
+              name:
+                type: string
+              logo_url:
+                type: string
+              published_at:
+                type: string
+                format: date-time
+              publication_id:
+                type: string
+              anchor_id:
+                type: string
+              original_url:
+                type: string
+        supporting_count:
+          type: integer
+          description: Общее количество подтверждений
+          example: 6
+        evidence_snippet:
+          type: string
+          nullable: true
+          description: Фрагмент из первоисточника
+
+    StoryPublication:
+      type: object
+      description: Публикация в контексте сюжета
+      properties:
+        publication_id:
+          type: string
+        anchor_id:
+          type: string
+          example: pub_891
+        published_at:
+          type: string
+          format: date-time
+        source:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            logo_url:
+              type: string
+        title:
+          type: string
+        description:
+          type: string
+        original_url:
+          type: string
+        is_mine:
+          type: boolean
+          description: Источник в подписках редактора
+
+    SearchPublicationsResult:
+      type: object
+      properties:
+        type:
+          type: string
+          example: publications
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              publication_id:
+                type: string
+              published_at:
+                type: string
+                format: date-time
+              source:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  logo_url:
+                    type: string
+              title:
+                type: string
+              title_highlight:
+                type: string
+                description: Заголовок с подсветкой совпадений (HTML)
+              snippet:
+                type: string
+              snippet_highlight:
+                type: string
+                description: Сниппет с подсветкой
+              original_url:
+                type: string
+              story_id:
+                type: string
+                nullable: true
+              story_status:
+                type: string
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    SearchSourcesResult:
+      type: object
+      properties:
+        type:
+          type: string
+          example: sources
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              source_id:
+                type: string
+              name:
+                type: string
+              logo_url:
+                type: string
+              type:
+                type: string
+              region:
+                type: string
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    PaginationMeta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 123
+        last_page:
+          type: integer
+          example: 7
