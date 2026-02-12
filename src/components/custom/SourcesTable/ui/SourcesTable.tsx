@@ -38,7 +38,9 @@ export const SourcesTable = ({ sources }: { sources: Source[] }) => {
               <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center">
                 <Square className="h-5 w-5 text-gray-600" />
               </div>
-              <span className="font-medium whitespace-nowrap">{source.url}</span>
+              <a href={`/sources/${source.id}`} className="font-medium whitespace-nowrap">
+                {source.url}
+              </a>
             </div>
 
             <span>{typeConfig[source.type].label}</span>

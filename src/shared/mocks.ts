@@ -408,3 +408,69 @@ export const sourcesMap = [
     logo_url: 'https://cdn.example.com/logos/tass.png',
   },
 ];
+
+export const singleSourceContent = {
+  source: {
+    id: 'src_123',
+    url: 'https://tass.ru',
+    name: 'ТАСС',
+    logo_url: 'https://cdn.example.com/logos/tass.png',
+    type: 'ia',
+    region: 'Россия',
+    is_active: true,
+    frequency_minutes: 5,
+  },
+  publications: [
+    {
+      id: 'pub_891',
+      source: {
+        id: 'string',
+        name: 'ТАСС',
+        logo_url: 'string',
+      },
+      published_at: '2026-02-09T15:30:00Z',
+      title: 'ЦБ повысил ключевую ставку до 18%',
+      snippet: 'Решение принято на фоне ускорения инфляции...',
+      original_url: 'http://example.com',
+      thumbnail_url: 'http://example.com',
+      story_id: 'story_123',
+      story_status: 'ready',
+    },
+    {
+      id: 'pub_8911',
+      source: {
+        id: 'string',
+        name: 'ТАСС',
+        logo_url: 'string',
+      },
+      published_at: '2026-02-09T15:30:00Z',
+      title: 'ЦБ повысил ключевую ставку до 18%',
+      snippet: 'Решение принято на фоне ускорения инфляции...',
+      original_url: 'http://example.com',
+      thumbnail_url: 'http://example.com',
+      story_id: 'story_123',
+      story_status: 'ready',
+    },
+    {
+      id: 'pub_8914',
+      source: {
+        id: 'string',
+        name: 'ТАСС',
+        logo_url: 'string',
+      },
+      published_at: '2026-02-09T15:30:00Z',
+      title: 'ЦБ повысил ключевую ставку до 18%',
+      snippet: 'Решение принято на фоне ускорения инфляции...',
+      original_url: 'http://example.com',
+      thumbnail_url: 'http://example.com',
+      story_id: 'story_123',
+      story_status: 'ready',
+    },
+  ],
+  meta: {
+    current_page: 1,
+    per_page: 20,
+    total: 123,
+    last_page: 7,
+  },
+};

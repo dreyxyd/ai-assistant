@@ -23,3 +23,9 @@ export const sourceNamesMap = {
   rbk: 'РБК',
   lenta: 'ЛЕНТА РУ',
 };
+
+export const sourceTypesMap = {
+  ia: 'ИА',
+  smi: 'СМИ',
+  press: 'Пресса',
+};
