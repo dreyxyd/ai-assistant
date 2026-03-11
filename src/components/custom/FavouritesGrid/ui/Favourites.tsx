@@ -1,13 +1,15 @@
 import { EventsGrid } from '@/components/custom/EventsGrid/ui/EventsGrid.tsx';
-import { favourites } from '@/shared/mocks.ts';
+import type { Story } from '@/shared/api/types.ts';
 
-//TODO: вынести логику получения с бекенда избранного в хук
+interface FavouritesProps {
+  stories: Story[];
+}
 
-export const Favourites = () => {
+export const Favourites = ({ stories }: FavouritesProps) => {
   return (
     <div className="flex flex-col justify-center gap-4">
-      <div className="font-bold text-xl">Важне для меня</div>
-      <EventsGrid events={favourites} />
+      <div className="font-bold text-xl">Важное для меня</div>
+      <EventsGrid events={stories} />
     </div>
   );
 };

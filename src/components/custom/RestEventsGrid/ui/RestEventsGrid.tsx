@@ -1,13 +1,15 @@
 import { EventsGrid } from '@/components/custom/EventsGrid/ui/EventsGrid.tsx';
-import { restEvents } from '@/shared/mocks.ts';
+import type { Story } from '@/shared/api/types.ts';
 
-//TODO: вынести логику получения с бекенда избранного в хук
+interface RestEventsGridProps {
+  stories: Story[];
+}
 
-export const RestEventsGrid = () => {
+export const RestEventsGrid = ({ stories }: RestEventsGridProps) => {
   return (
     <div className="flex flex-col justify-center gap-4">
       <div className="font-bold text-xl">Остальные сюжеты</div>
-      <EventsGrid events={restEvents} columns={5} showImage={true} />
+      <EventsGrid events={stories} columns={5} showImage />
     </div>
   );
 };

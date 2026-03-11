@@ -1,13 +1,11 @@
 import { EventItem } from '@/components/custom/EventItem/ui/EventItem.tsx';
+import type { Story } from '@/shared/api/types.ts';
 
-interface FavouritesGridProps {
-  events: EventItem[];
+interface EventsGridProps {
+  events: Story[];
   columns?: 2 | 5;
   showImage?: boolean;
 }
-//TODO: реализовать логику удаления из избранного при клике на Star в EventItem
-
-//TODO этот компонент делает то же самое что и StreamEventsGrid
 
 const gridColsMap: Record<number, string> = {
   2: 'grid-cols-2',
@@ -18,7 +16,8 @@ const textSizeMap: Record<number, string> = {
   2: 'text-m',
   5: 'text-sm',
 };
-export const EventsGrid = ({ events, columns = 2, showImage = false }: FavouritesGridProps) => {
+
+export const EventsGrid = ({ events, columns = 2, showImage = false }: EventsGridProps) => {
   return (
     <div
       className={`
@@ -29,7 +28,7 @@ export const EventsGrid = ({ events, columns = 2, showImage = false }: Favourite
       `}
     >
       {events.map((item) => (
-        <EventItem key={item.title} event={item} showImage={showImage} />
+        <EventItem key={item.id} event={item} showImage={showImage} />
       ))}
     </div>
   );
