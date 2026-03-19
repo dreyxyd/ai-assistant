@@ -80,15 +80,18 @@ export const EventItem = ({ event, showImage = false }: EventItemProps) => {
           </button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col h-full justify-between gap-4 px-2">
         <div>
-          <div className="font-bold">Последнее значимое: {lastTitle}</div>
-          <div>{last_significant_update.text}</div>
+          <div>
+            <div className="font-bold">Последнее значимое: {lastTitle}</div>
+            <div>{last_significant_update.text}</div>
+          </div>
+          <div>
+            <div className="font-bold">С чего началось: {firstTitle}</div>
+            <div>{first_publication.text}</div>
+          </div>
         </div>
-        <div>
-          <div className="font-bold">С чего началось: {firstTitle}</div>
-          <div>{first_publication.text}</div>
-        </div>
+
         <div className="flex flex-wrap items-center gap-2">
           <div>{publications_count} публикаций</div>
           <div>{sources_count} источников</div>
