@@ -1,35 +1,18 @@
 import { sourceIconsMap, sourceNamesMap } from '../../../../shared/consts.tsx';
 import { HoverBadge } from '@/components/custom/HoverBadge/ui/HoverBadge.tsx';
 import { SquareArrowOutUpRight } from 'lucide-react';
-
-interface Confirmed {
-  id: string;
-  sourceName: string;
-  link: string;
-}
-
-interface SummaryRow {
-  id: string;
-  time: string;
-  title: string;
-  sourceName: string;
-  confirmed: Confirmed[];
-  outerLink: string;
-  link: string;
-  fullText: string;
-  additionalSources: SummaryRow[];
-}
+import type { SummaryTimelineItem } from '@/widgets/Summary/model/summaryTimelineItem.ts';
 
 interface SummaryList {
-  data: SummaryRow;
+  data: SummaryTimelineItem;
 }
 
-const renderSourceBadges = (sources: SummaryRow[]) => {
+const renderSourceBadges = (sources: SummaryTimelineItem[]) => {
   const firstTwo = sources.slice(0, 2);
   const rest = sources.slice(2);
   return (
     <div className="flex flex-row items-center justify-start gap-1">
-      {firstTwo.map(({ id, time, sourceName, confirmed, outerLink, link }) => (
+      {firstTwo.map(({ id, time, sourceName, link }) => (
         <a
           key={id}
           href={link}
@@ -58,7 +41,7 @@ const renderSourceBadges = (sources: SummaryRow[]) => {
 };
 
 export const SummaryTextRow = ({ data }: SummaryList) => {
-  const { title, confirmed, outerLink, link, fullText, additionalSources } = data;
+  const { fullText, additionalSources } = data;
 
   return (
     <div className="flex flex-col w-full">

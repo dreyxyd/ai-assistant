@@ -1,31 +1,14 @@
 import { sourceIconsMap, sourceNamesMap } from '../../../../shared/consts.tsx';
 import { HoverBadge } from '@/components/custom/HoverBadge/ui/HoverBadge.tsx';
-
-interface Confirmed {
-  id: string;
-  sourceName: string;
-  link: string;
-}
-
-interface SummaryRow {
-  id: string;
-  time: string;
-  title: string;
-  sourceName: string;
-  confirmed: Confirmed[];
-  outerLink: string;
-  link: string;
-  fullText: string;
-  additionalSources: SummaryRow[];
-}
+import type { SummaryTimelineItem } from '@/widgets/Summary/model/summaryTimelineItem.ts';
 
 interface SummaryList {
-  data: SummaryRow;
+  data: SummaryTimelineItem;
   isLast: boolean;
 }
 
-const renderAdditionalSources = (sources: SummaryRow[]) => {
-  return sources.map(({ id, time, sourceName, confirmed, outerLink, link }) => (
+const renderAdditionalSources = (sources: SummaryTimelineItem[]) => {
+  return sources.map(({ id, time, sourceName, confirmed, link }) => (
     <div key={id} className="flex flex-row justify-between items-center w-full mb-1 ">
       <div className="flex flex-row items-center justify-start gap-1">
         <div>{sourceIconsMap[sourceName]}</div>
@@ -52,7 +35,7 @@ const renderAdditionalSources = (sources: SummaryRow[]) => {
 };
 
 export const SummaryRow = ({ data, isLast }: SummaryList) => {
-  const { time, title, sourceName, confirmed, outerLink, link, fullText, additionalSources } = data;
+  const { time, title, sourceName, confirmed, outerLink, link, additionalSources } = data;
 
   return (
     <div className="flex flex-row gap-2">

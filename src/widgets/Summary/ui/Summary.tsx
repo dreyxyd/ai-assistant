@@ -1,13 +1,21 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
 import { useState } from 'react';
-import { summaryMap } from '@/shared/mocks.ts';
 import { SummaryRow } from '@/widgets/Summary/ui/SummaryRow.tsx';
 import { SummaryTextRow } from '@/widgets/Summary/ui/SummaryTextRow.tsx';
+import type { SummaryTimelineItem } from '@/widgets/Summary/model/summaryTimelineItem.ts';
 
-export const Summary = () => {
+const TIMELINE_PREVIEW = 8;
+
+interface SummaryProps {
+  facts: SummaryTimelineItem[];
+  factsTotal: number;
+}
+
+export const Summary = ({ facts, factsTotal }: SummaryProps) => {
   const [activeTab, setActiveTab] = useState('timeline');
-  const summarySlice = summaryMap.slice(0, 8);
+  const summarySlice = facts.slice(0, TIMELINE_PREVIEW);
+
   return (
     <Card className="w-full">
       <CardHeader className="border-b px-4 flex flex-row justify-between items-center">
@@ -27,8 +35,8 @@ export const Summary = () => {
             <SummaryTextRow data={item} key={item.id} />
           ),
         )}
-        <button className="w-full h-10 rounded-xl font-semibold cursor-pointer mt-10">
-          Показать всю историю ({summarySlice.length} факта)
+        <button type="button" className="w-full h-10 rounded-xl font-semibold cursor-pointer mt-10">
+          Показать всю историю ({factsTotal} фактов)
         </button>
       </CardContent>
     </Card>

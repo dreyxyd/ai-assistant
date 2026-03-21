@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { sourceIconsMap } from '../../../../../shared/consts.tsx';
 
 export interface AllSourcesItem {
-  id: number;
+  id: string | number;
   time: string;
   sourceName: string;
   title: string;
@@ -13,9 +13,9 @@ interface AllSourcesPostsList {
   data: AllSourcesItem[];
 }
 export const AllSourcesPostsList = ({ data }: AllSourcesPostsList) => {
-  const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [copiedId, setCopiedId] = useState<string | number | null>(null);
 
-  const handleCopy = async (id: number, link: string) => {
+  const handleCopy = async (id: string | number, link: string) => {
     try {
       await navigator.clipboard.writeText(link);
       setCopiedId(id);
@@ -31,11 +31,11 @@ export const AllSourcesPostsList = ({ data }: AllSourcesPostsList) => {
     <div className="w-full">
       <div className="text-xl font-bold md:pl-14">Все источники ({data.length})</div>
       {data.map((item) => (
-        <div className="flex flex-row gap-6 items-center justify-start">
+        <div key={item.id} className="flex flex-row gap-6 items-center justify-start">
           <div>{formatTime(item.time)}</div>
           <div className="border-b border-gray-200 flex flex-row items-center justify-between w-full">
             <div className="flex flex-row justify-center items-center">
-              <div>{sourceIconsMap[item.sourceName]}</div>
+              <div>{sourceIconsMap[item.sourceName as keyof typeof sourceIconsMap] ?? null}</div>
               <div>{item.title}</div>
             </div>
             <div className="flex flex-row justify-center items-center">

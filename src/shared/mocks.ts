@@ -1,11 +1,11 @@
 export const article = {
   id: 1,
   headerData: {
-    isFavourite: true,
-    title: 'Невероятные новости',
-    lastUpdatedAt: '2 минуты',
-    postsCount: 42,
-    sourcesCount: 18,
+    is_starred_by_me: true,
+    ai_title: 'Невероятные новости',
+    last_significant_update_at: '2 минуты',
+    publications_count: 42,
+    sources_count: 18,
   },
 
   whatsNew: [
