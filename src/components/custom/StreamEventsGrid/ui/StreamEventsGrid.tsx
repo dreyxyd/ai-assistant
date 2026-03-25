@@ -11,7 +11,7 @@ export const StreamEventsGrid = ({ streamEvents }: StreamEventsGridProps) => {
       "
     >
       {streamEvents.map((streamEvent) => (
-        <StreamEventItem streamEvent={streamEvent} key={streamEvent.title} />
+        <StreamEventItem streamEvent={streamEvent} key={streamEvent.id} />
       ))}
     </div>
   );

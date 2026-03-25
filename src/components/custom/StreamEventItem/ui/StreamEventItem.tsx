@@ -50,12 +50,16 @@ export const StreamEventItem = ({ streamEvent }: StreamEventItemProps) => {
   const navigate = useNavigate();
   const { source, time, title, subtitle, originalLink, imageUrl } = streamEvent;
 
-  const goToArticle = () => {
-    navigate(ROUTES.article(streamEvent.id));
+  const goToStory = () => {
+    if (!streamEvent.story_id) return;
+    navigate(ROUTES.article(streamEvent.story_id));
   };
 
   return (
-    <Card className="flex cursor-pointer flex-col justify-between" onClick={goToArticle}>
+    <Card
+      className={`flex flex-col justify-between ${streamEvent.story_id ? 'cursor-pointer' : ''}`}
+      onClick={streamEvent.story_id ? goToStory : undefined}
+    >
       <CardHeader>
         <CardTitle className="flex flex-row items-center justify-between">
           <div className="flex flex-row gap-2 items-center">
@@ -76,11 +80,12 @@ export const StreamEventItem = ({ streamEvent }: StreamEventItemProps) => {
             </a>
             <button
               type="button"
+              disabled={!streamEvent.story_id}
               onClick={(e) => {
                 e.preventDefault();
-                goToArticle();
+                goToStory();
               }}
-              className="flex flex-row items-center justify-center bg-transparent p-0 text-inherit hover:text-neutral-500"
+              className="flex flex-row items-center justify-center bg-transparent p-0 text-inherit hover:text-neutral-500 disabled:pointer-events-none disabled:opacity-40"
             >
               <ArrowRight size={16} /> В сюжет
             </button>

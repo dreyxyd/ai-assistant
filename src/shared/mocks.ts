@@ -168,32 +168,6 @@ export const restEvents = [
   },
 ];
 
-export const streamEvents = [
-  {
-    id: 1,
-    source: 'string',
-    time: '2026-01-21 10:00',
-    title: 'Событие 1',
-    originalLink: 'string',
-    localLink: 'string',
-    imageUrl: 'https://placehold.co/600x400',
-    type: 'type1',
-    period: '24 часа',
-  },
-  {
-    id: 2,
-    source: 'string2',
-    time: '2026-01-20 12:00',
-    title: 'Событие 2',
-    imageUrl: 'https://placehold.co/600x400',
-    subtitle: 'Описание 2',
-    originalLink: 'string',
-    localLink: 'string',
-    type: 'type2',
-    period: 'Неделя',
-  },
-];
-
 const confirmedMap = [
   {
     id: 1,
