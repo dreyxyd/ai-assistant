@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { FiltersBar } from '@/widgets/FiltersBar/ui/FiltersBar.tsx';
+import type { StreamFiltersState } from '@/widgets/FiltersBar/ui/FiltersBar.tsx';
 import { StreamEventsGrid } from '@/components/custom/StreamEventsGrid/ui/StreamEventsGrid.tsx';
 import { fetchPublications, mapPublicationToStreamEvent } from '@/shared/api/publications.ts';
 
@@ -22,11 +23,24 @@ function publicationInPeriod(publishedAt: string, period: string): boolean {
   return true;
 }
 
+function uniqueSourcesFromPublications(
+  publications: { source: { id: number; name: string } }[],
+): { id: number; name: string }[] {
+  const byId = new Map<number, { id: number; name: string }>();
+  for (const p of publications) {
+    const s = p.source;
+    if (!byId.has(s.id)) {
+      byId.set(s.id, { id: s.id, name: s.name });
+    }
+  }
+  return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+}
+
 export const EventsStream = () => {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<StreamFiltersState>({
     type: '',
     period: '',
-    source: [] as string[],
+    source: [],
     query: '',
   });
 
@@ -44,17 +58,19 @@ export const EventsStream = () => {
       }),
   });
 
+  const sourceOptions = useMemo(() => uniqueSourcesFromPublications(data?.data ?? []), [data]);
+
   const streamEvents = useMemo(() => {
     const list = data?.data ?? [];
     return list
       .filter((p) => publicationInPeriod(p.published_at, filters.period))
-      .map(mapPublicationToStreamEvent)
-      .filter((e) => (filters.source.length === 0 ? true : filters.source.includes(e.source)));
+      .filter((p) => (filters.source.length === 0 ? true : filters.source.includes(p.source.id)))
+      .map(mapPublicationToStreamEvent);
   }, [data, filters.period, filters.source]);
 
   return (
     <div className="flex flex-col justify-center gap-4">
-      <FiltersBar filters={filters} setFilters={setFilters} />
+      <FiltersBar filters={filters} setFilters={setFilters} sourceOptions={sourceOptions} />
 
       {isLoading && <div className="text-muted-foreground">Загрузка...</div>}
 

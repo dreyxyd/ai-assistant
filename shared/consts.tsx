@@ -8,7 +8,6 @@ export const ROUTES = {
 
 export const typeOptions = ['Пресс-Службы', 'ИА', 'СМИ'];
 export const periodOptions = ['Час', '24 Часа'];
-export const sourceOptions = ['source1', 'source2', 'source3'];
 
 export const sourceIconsMap = {
   tass: <Square size={16} color="blue" fill="blue" />,

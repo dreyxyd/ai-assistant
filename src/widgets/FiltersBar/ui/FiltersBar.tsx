@@ -1,10 +1,25 @@
+import type { Dispatch, SetStateAction } from 'react';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { FilterSelect } from '@/widgets/FiltersBar/ui/FilterSelect.tsx';
-import { periodOptions, sourceOptions, typeOptions } from '../../../../shared/consts.tsx';
+import { periodOptions, typeOptions } from '../../../../shared/consts.tsx';
 import { FilterMultiSelect } from '@/widgets/FiltersBar/ui/FilterMultiSelect.tsx';
+import type { SourceSelectOption } from '@/widgets/FiltersBar/ui/lib/getMultiSelectLabel.ts';
 
-export const FiltersBar = ({ filters, setFilters }) => {
+export interface StreamFiltersState {
+  type: string;
+  period: string;
+  source: number[];
+  query: string;
+}
+
+interface FiltersBarProps {
+  filters: StreamFiltersState;
+  setFilters: Dispatch<SetStateAction<StreamFiltersState>>;
+  sourceOptions: SourceSelectOption[];
+}
+
+export const FiltersBar = ({ filters, setFilters, sourceOptions }: FiltersBarProps) => {
   const resetFilters = () => {
     setFilters({
       type: '',

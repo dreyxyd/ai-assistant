@@ -3,29 +3,32 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandGroup, CommandItem } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
-import { getMultiSelectLabel } from '@/widgets/FiltersBar/ui/lib/getMultiSelectLabel.ts';
+import {
+  getSourceMultiSelectLabel,
+  type SourceSelectOption,
+} from '@/widgets/FiltersBar/ui/lib/getMultiSelectLabel.ts';
 
 interface FilterMultiSelectProps {
   placeholder: string;
-  value: string[];
-  onChange: (value: string[]) => void;
-  options: string[];
+  value: number[];
+  onChange: (value: number[]) => void;
+  options: SourceSelectOption[];
 }
 
 const MAX_VISIBLE = 2;
 
 export const FilterMultiSelect = ({ placeholder, value, onChange, options }: FilterMultiSelectProps) => {
-  const toggleValue = (option: string) => {
-    onChange(value.includes(option) ? value.filter((v) => v !== option) : [...value, option]);
+  const toggleValue = (id: number) => {
+    onChange(value.includes(id) ? value.filter((v) => v !== id) : [...value, id]);
   };
 
   const isAllSelected = value.length === options.length && options.length > 0;
 
   const toggleAll = () => {
-    onChange(isAllSelected ? [] : options);
+    onChange(isAllSelected ? [] : options.map((o) => o.id));
   };
 
-  const label = getMultiSelectLabel(value, placeholder, MAX_VISIBLE);
+  const label = getSourceMultiSelectLabel(value, options, placeholder, MAX_VISIBLE);
 
   return (
     <Popover>
@@ -50,9 +53,9 @@ export const FilterMultiSelect = ({ placeholder, value, onChange, options }: Fil
             <div className="my-1 h-px bg-border" />
 
             {options.map((option) => (
-              <CommandItem key={option} onSelect={() => toggleValue(option)} className="flex items-center gap-2">
-                <Check className={cn('h-4 w-4', value.includes(option) ? 'opacity-100' : 'opacity-0')} />
-                {option}
+              <CommandItem key={option.id} onSelect={() => toggleValue(option.id)} className="flex items-center gap-2">
+                <Check className={cn('h-4 w-4', value.includes(option.id) ? 'opacity-100' : 'opacity-0')} />
+                {option.name}
               </CommandItem>
             ))}
           </CommandGroup>
