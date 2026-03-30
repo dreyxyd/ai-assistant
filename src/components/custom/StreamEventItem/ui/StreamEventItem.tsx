@@ -93,7 +93,7 @@ export const StreamEventItem = ({ streamEvent }: StreamEventItemProps) => {
         </div>
         {imageUrl && (
           <div className="hidden md:block w-full max-w-[120px]">
-            <img alt={title} src={imageUrl} className="rounded-xl" />
+            <img alt="img" src={imageUrl} className="rounded-xl" />
           </div>
         )}
       </CardContent>
